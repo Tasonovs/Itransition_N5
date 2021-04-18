@@ -1,0 +1,64 @@
+﻿@model IEnumerable<N5.Authorization.Models.User>
+@{
+    ViewData["Title"] = "Пользователи";
+}
+
+<h1 class="display-4 text-center">Таблица пользователей</h1>
+
+<form asp-action="BlockUsers" asp-controller="Account" method="post">
+    <div class="btn-group pb-2">
+        <button type="submit" asp-action="BlockUsers" asp-controller="Account" class="btn btn-dark"
+                onclick="return confirm('Вы уверены, что хотите блокировать выделенные записи')">
+            Блокировать
+        </button>
+        <button asp-action="UnblockUsers" asp-controller="Account" class="btn btn-dark"><i class="fa fa-lock-open"></i></button>
+        <button asp-action="DeleteUsers" asp-controller="Account" class="btn btn-danger"
+                onclick="return confirm('Вы уверены, что хотите удалить выделенные записи')">
+            <i class="fa fa-trash"></i>
+        </button>
+    </div>
+    <table class="table table-bordered">
+        <thead class="thead-light">
+            <tr>
+                <th scope="col"><input type="checkbox" onClick="toggle(this)" id="checkAll"></th>
+                <th scope="col">Id</th>
+                <th scope="col"><i class="fas fa-lock"></i></th>
+                <th scope="col">Имя</th>
+                <th scope="col">Email</th>
+                <th scope="col">Пароль</th>
+                <th scope="col">Дата регистрации</th>
+                <th scope="col">Последний вход</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td><input type="checkbox" class="checkbox" value="@item.Id" name="userId"></td>
+                    <th scope="row">@item.Id</th>
+                    @if (item.IsBlocked)
+                    {
+                        <td><i class="fas fa-lock"></i></td>
+                    }
+                    else
+                    {
+                        <td><i class="fas fa-lock-open text-black-50"></i></td>
+                    }
+                    <td>@item.Name</td>
+                    <td>@item.Email</td>
+                    <td>@item.Password</td>
+                    <td>@item.RegistrationDate</td>
+                    <td>@item.LastLoginDate</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</form>
+
+    <script>
+        function toggle(source) {
+            var inputElements = document.getElementsByClassName('checkbox');
+            for (var i = 0; inputElements[i]; ++i)
+                inputElements[i].checked = source.checked;
+        }
+    </script>
